@@ -82,6 +82,9 @@ Create config/local.json and put the following in it:
         hostname: 'localhost'
     }
 }
+```
+Run the following commands:
+```
 node server/scripts/fetchdata.js
 node .
 node server/gamenode
