@@ -110,6 +110,7 @@ class DeckService {
                 includeInSealed: false,
                 houses: deckResponse.data._links.houses.map(house => house.replace(' ', '').toLowerCase()),
                 cards: cards,
+                favorite: false,
                 lastUpdated: new Date()
             });
         }
@@ -119,6 +120,7 @@ class DeckService {
 
     update(deck) {
         let properties = {
+            favorite: deck.favorite,
             verified: deck.verified,
             lastUpdated: new Date()
         };

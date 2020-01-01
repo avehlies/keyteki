@@ -109,4 +109,44 @@ module.exports.init = function(server) {
         await deckService.update(deck);
         res.send({ success: true, message: 'Deck verified successfully', deckId: id });
     }));
+
+    server.post('/api/decks/:id/favorite', passport.authenticate('jwt', { session: false }), wrapAsync(async function(req, res) {
+        let id = req.params.id;
+
+        let deck = await deckService.getById(id);
+
+        if(!deck) {
+            return res.status(404).send({ success: false, message: 'No such deck' });
+        }
+
+        if(deck.username !== req.user.username) {
+            return res.status(401).send({ message: 'Unauthorized' });
+        }
+
+        deck.id = id;
+        deck.favorite = true;
+
+        await deckService.update(deck);
+        res.send({ success: true, deck: deck });
+    }));
+
+    server.delete('/api/decks/:id/favorite', passport.authenticate('jwt', { session: false }), wrapAsync(async function(req, res) {
+        let id = req.params.id;
+
+        let deck = await deckService.getById(id);
+
+        if(!deck) {
+            return res.status(404).send({ success: false, message: 'No such deck' });
+        }
+
+        if(deck.username !== req.user.username) {
+            return res.status(401).send({ message: 'Unauthorized' });
+        }
+
+        deck.id = id;
+        deck.favorite = false;
+
+        await deckService.update(deck);
+        res.send({ success: true, deck: deck });
+    }));
 };
